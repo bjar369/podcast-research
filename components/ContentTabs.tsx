@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Youtube, Mic, BarChart } from 'lucide-react';
+import { Youtube, BarChart } from 'lucide-react';
 import type { PersonSearchResult, ContentAnalysis } from '../types/content';
 
 interface ContentTabsProps {
   results: PersonSearchResult | null;
   analysis: ContentAnalysis | null;
-  onGetTranscript: (type: 'youtube' | 'podcast', id: string) => Promise<void>;
+  onGetTranscript: (type: 'youtube', id: string) => Promise<void>;
   onAnalyzeContent: () => Promise<void>;
   transcriptLoading: boolean;
   analysisLoading: boolean;
@@ -21,7 +21,7 @@ export default function ContentTabs({
   transcriptLoading,
   analysisLoading,
 }: ContentTabsProps) {
-  const [activeTab, setActiveTab] = useState<'youtube' | 'podcasts' | 'analysis'>('youtube');
+  const [activeTab, setActiveTab] = useState<'youtube' | 'analysis'>('youtube');
 
   if (!results) return null;
 
@@ -39,17 +39,6 @@ export default function ContentTabs({
           >
             <Youtube className="w-4 h-4" />
             YouTube ({results.youtubeVideos.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('podcasts')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
-              activeTab === 'podcasts'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            <Mic className="w-4 h-4" />
-            Podcasts ({results.podcasts.length})
           </button>
           <button
             onClick={() => setActiveTab('analysis')}
@@ -100,50 +89,6 @@ export default function ContentTabs({
                       className="text-green-600 hover:text-green-700 text-sm disabled:text-gray-400"
                     >
                       {video.transcript ? 'View Transcript' : 'Get Transcript'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {activeTab === 'podcasts' && (
-        <div className="space-y-4">
-          {results.podcasts.map((episode) => (
-            <div key={episode.id} className="bg-white rounded-lg shadow-md p-4">
-              <div className="flex gap-4">
-                <img
-                  src={episode.image}
-                  alt={episode.title}
-                  className="w-24 h-24 object-cover rounded"
-                />
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">{episode.title}</h3>
-                  <p className="text-gray-600 text-sm mb-2">{episode.podcast.title}</p>
-                  <p className="text-gray-700 text-sm line-clamp-2 mb-3">
-                    {episode.description}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span>{new Date(episode.pub_date_ms).toLocaleDateString()}</span>
-                    <span>{Math.floor(episode.audio_length_sec / 60)} minutes</span>
-                  </div>
-                  <div className="mt-3 flex gap-2">
-                    <a
-                      href={episode.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700 text-sm"
-                    >
-                      Listen to Episode
-                    </a>
-                    <button
-                      onClick={() => onGetTranscript('podcast', episode.id)}
-                      disabled={transcriptLoading}
-                      className="text-green-600 hover:text-green-700 text-sm disabled:text-gray-400"
-                    >
-                      {episode.transcript ? 'View Transcript' : 'Get Transcript'}
                     </button>
                   </div>
                 </div>
