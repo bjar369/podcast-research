@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Youtube, BarChart } from 'lucide-react';
 import type { PersonSearchResult, ContentAnalysis } from '../types/content';
+import TranscriptViewer from './TranscriptViewer';
 
 interface ContentTabsProps {
   results: PersonSearchResult | null;
@@ -22,6 +23,10 @@ export default function ContentTabs({
   analysisLoading,
 }: ContentTabsProps) {
   const [activeTab, setActiveTab] = useState<'youtube' | 'analysis'>('youtube');
+  const [selectedTranscript, setSelectedTranscript] = useState<{
+    transcript: any;
+    videoTitle: string;
+  } | null>(null);
 
   if (!results) return null;
 

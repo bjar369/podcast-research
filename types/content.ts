@@ -31,6 +31,20 @@ export interface Episode {
   transcript?: string;
 }
 
+export interface TranscriptSegment {
+  text: string;
+  duration: number;
+  offset: number;
+}
+
+export interface EnhancedTranscript {
+  fullText: string;
+  segments: TranscriptSegment[];
+  wordCount: number;
+  duration: number;
+  language: string;
+}
+
 export interface YouTubeVideo {
   id: string;
   title: string;
@@ -42,7 +56,7 @@ export interface YouTubeVideo {
   duration: string;
   viewCount: number;
   url: string;
-  transcript?: string;
+  transcript?: EnhancedTranscript;
 }
 
 export interface PersonSearchResult {
